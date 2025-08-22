@@ -35,11 +35,5 @@ This project is a frontend application designed to demonstrate file upload, summ
 
 ## Future Enhancements
 
-- Add backend integration for saving and retrieving summaries.
-- Support for additional file formats.
-- Enhanced email validation and error handling.
 - Dark mode support.
 
-## License
-
-This project is licensed under the MIT License.
