@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Meeting Notes Summarizer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="app-header">
+            <h1>AI Meeting Notes Summarizer</h1>
+            <p class="app-description">Upload meeting transcripts and generate professional summaries with AI</p>
+        </header>
+
+        <main class="app-main">
+            <!-- File Upload Section -->
+            <section class="card upload-section" id="uploadSection">
+                <div class="card__header">
+                    <h2>1. Upload Meeting Transcript</h2>
+                </div>
+                <div class="card__body">
+                    <div class="file-upload-area" id="fileUploadArea">
+                        <div class="upload-icon">📄</div>
+                        <h3>Drag & drop your meeting transcript here</h3>
+                        <p>or <button type="button" class="btn btn--primary" id="selectFileBtn">Select File</button></p>
+                        <p class="upload-info">Supports .txt files up to 10MB</p>
+                        <input type="file" id="fileInput" accept=".txt" style="display: none;">
+                    </div>
+                    
+                    <div class="file-preview hidden" id="filePreview">
+                        <div class="file-info">
+                            <strong id="fileName"></strong>
+                            <button type="button" class="btn btn--outline btn--sm" id="clearFileBtn">Clear File</button>
+                        </div>
+                        <div class="file-content" id="fileContent"></div>
+                    </div>
+                    
+                    <button type="button" class="btn btn--secondary" id="useSampleBtn">Use Sample Transcript</button>
+                </div>
+            </section>
+
+            <!-- Custom Instructions Section -->
+            <section class="card instructions-section" id="instructionsSection">
+                <div class="card__header">
+                    <h2>2. Summarization Instructions</h2>
+                </div>
+                <div class="card__body">
+                    <div class="preset-options">
+                        <label class="form-label">Quick Presets:</label>
+                        <div class="preset-buttons">
+                            <button type="button" class="btn btn--outline btn--sm preset-btn" data-preset="executive">Executive Summary</button>
+                            <button type="button" class="btn btn--outline btn--sm preset-btn" data-preset="action_items">Action Items Only</button>
+                            <button type="button" class="btn btn--outline btn--sm preset-btn" data-preset="formal">Formal Minutes</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customInstructions" class="form-label">Custom Instructions:</label>
+                        <textarea 
+                            id="customInstructions" 
+                            class="form-control" 
+                            rows="4" 
+                            placeholder="Enter specific instructions for how you'd like the meeting summarized..."
+                        ></textarea>
+                        <div class="character-count">
+                            <span id="instructionsCount">0</span>/500 characters
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI Summarization Section -->
+            <section class="card summarization-section" id="summarizationSection">
+                <div class="card__header">
+                    <h2>3. Generate AI Summary</h2>
+                </div>
+                <div class="card__body">
+                    <button type="button" class="btn btn--primary btn--lg btn--full-width" id="generateBtn" disabled>
+                        <span class="btn-text">Generate Summary</span>
+                        <span class="loading-spinner hidden"></span>
+                    </button>
+                    
+                    <div class="summary-output hidden" id="summaryOutput">
+                        <label class="form-label">Generated Summary:</label>
+                        <div class="summary-content" id="summaryContent"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary Editing Section -->
+            <section class="card editing-section hidden" id="editingSection">
+                <div class="card__header">
+                    <h2>4. Edit Summary</h2>
+                </div>
+                <div class="card__body">
+                    <div class="form-group">
+                        <label for="editableSummary" class="form-label">Edit Summary:</label>
+                        <textarea 
+                            id="editableSummary" 
+                            class="form-control" 
+                            rows="8"
+                        ></textarea>
+                        <div class="character-count">
+                            <span id="summaryCount">0</span> characters
+                        </div>
+                    </div>
+                    
+                    <div class="edit-actions">
+                        <button type="button" class="btn btn--secondary" id="saveEditBtn">Save Changes</button>
+                        <button type="button" class="btn btn--outline" id="revertBtn">Revert to Original</button>
+                    </div>
+                    
+                    <div class="version-history">
+                        <label class="form-label">Version History:</label>
+                        <div class="versions">
+                            <span class="status status--info" id="versionStatus">Current version</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Email Sharing Section -->
+            <section class="card sharing-section hidden" id="sharingSection">
+                <div class="card__header">
+                    <h2>5. Share Summary</h2>
+                </div>
+                <div class="card__body">
+                    <div class="form-group">
+                        <label for="emailRecipients" class="form-label">Recipient Emails:</label>
+                        <input 
+                            type="text" 
+                            id="emailRecipients" 
+                            class="form-control" 
+                            placeholder="Enter email addresses separated by commas"
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="emailSubject" class="form-label">Subject:</label>
+                        <input 
+                            type="text" 
+                            id="emailSubject" 
+                            class="form-control" 
+                            value="Meeting Summary - Q4 Planning Session"
+                        >
+                    </div>
+                    
+                    <div class="email-preview" id="emailPreview">
+                        <label class="form-label">Email Preview:</label>
+                        <div class="preview-content">
+                            <div class="preview-header">
+                                <strong>Subject:</strong> <span id="previewSubject"></span><br>
+                                <strong>To:</strong> <span id="previewRecipients"></span>
+                            </div>
+                            <div class="preview-body" id="previewBody"></div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="btn btn--primary btn--lg" id="sendEmailBtn" disabled>
+                        <span class="btn-text">Send Summary</span>
+                        <span class="loading-spinner hidden"></span>
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Success Modal -->
+        <div class="modal hidden" id="successModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Summary Sent Successfully!</h3>
+                </div>
+                <div class="modal-body">
+                    <p>Your meeting summary has been sent to the specified recipients.</p>
+                    <div class="success-actions">
+                        <button type="button" class="btn btn--primary" id="startOverBtn">Start New Summary</button>
+                        <button type="button" class="btn btn--outline" id="closeModalBtn">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Container -->
+        <div class="notification-container" id="notificationContainer"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
