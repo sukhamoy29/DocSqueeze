@@ -1,4 +1,4 @@
-# Frontend Demo
+# DocSqueeze
 
 This project is a frontend application designed to demonstrate file upload, summarization, and sharing functionalities. It provides a user-friendly interface for uploading files, generating summaries, editing them, and sharing via email.
 
